@@ -26,11 +26,24 @@ App macOS native (SwiftUI), sans dépendance externe.
 
 ## Installer
 
+### Télécharger
+
+Prends `Tracer-x.y.z.zip` dans les [Releases](https://github.com/Djoko-cli/tracer/releases),
+décompresse-le et glisse `Tracer.app` dans Applications. macOS 14 ou plus récent,
+Apple Silicon ou Intel.
+
+L'app n'est pas notariée par Apple : au premier lancement, macOS la bloque. Ouvre
+**Réglages Système › Confidentialité et sécurité** et clique sur **Ouvrir quand même**
+(ou, dans le Terminal : `xattr -dr com.apple.quarantine /Applications/Tracer.app`).
+
+### Compiler
+
 Il faut Xcode (ou les Command Line Tools avec Swift 6) et macOS 14 ou plus récent.
 
 ```bash
 ./scripts/build-app.sh            # construit et installe ~/Applications/Tracer.app
 ./scripts/build-app.sh /Applications
+UNIVERSAL=1 ./scripts/build-app.sh  # binaire Apple Silicon + Intel
 ```
 
 Le dossier de compilation est placé dans `~/Library/Caches/TracerBuild` : sur un Bureau

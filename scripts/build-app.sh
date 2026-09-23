@@ -4,17 +4,21 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 # The build folder must live outside iCloud-synced folders (Desktop, Documents):
-# codesign refuses the extended attributes iCloud adds to files.
+# codesign refuses the extended attributes iCloud adds to files. Same for the destination.
 SCRATCH="${TRACER_BUILD_DIR:-$HOME/Library/Caches/TracerBuild}"
 DEST="${1:-$HOME/Applications}"
 VERSION="$(cat VERSION 2>/dev/null || echo 0.1.0)"
 
-swift build -c release --scratch-path "$SCRATCH" --product Tracer
+# UNIVERSAL=1 builds for Apple Silicon and Intel
+ARCHS=()
+[ "${UNIVERSAL:-0}" = "1" ] && ARCHS=(--arch arm64 --arch x86_64)
+swift build -c release --scratch-path "$SCRATCH" --product Tracer "${ARCHS[@]}"
+BIN="$(swift build -c release --scratch-path "$SCRATCH" "${ARCHS[@]}" --show-bin-path)/Tracer"
 
 APP="$DEST/Tracer.app"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-cp "$SCRATCH/release/Tracer" "$APP/Contents/MacOS/Tracer"
+cp "$BIN" "$APP/Contents/MacOS/Tracer"
 cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 
 cat > "$APP/Contents/Info.plist" <<PLIST
