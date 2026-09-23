@@ -77,3 +77,7 @@ swift run --scratch-path ~/Library/Caches/TracerBuild -c release tracer-cli logo
 | `Sources/Tracer` | l'app SwiftUI |
 | `Sources/tracer-cli` | la même chose en ligne de commande |
 | `Tests/TracerCoreTests` | tests (Swift Testing) : `swift test --scratch-path ~/Library/Caches/TracerBuild` |
+
+## Licence
+
+MIT — voir [LICENSE](LICENSE).
